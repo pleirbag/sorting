@@ -17,6 +17,13 @@ std::vector<int>	vec_creator(int size){
 	return (unsorted);
 }
 
+void	run_time(int number_loops, std::chrono::time_point<std::chrono::steady_clock> time_0, std::chrono::time_point<std::chrono::steady_clock> time_end){
+	auto micro_seconds = std::chrono::duration_cast<std::chrono::microseconds>(time_end - time_0); 
+	std::cout << "loop ran in " <<micro_seconds.count() << " microseconds" <<'\n';
+	std::cout << "avarage runtime " << micro_seconds.count() / number_loops << " microseconds" << '\n';
+	return;
+}
+
 int main(int argc, char *argv[]){
 
 	if (argc < 4){
@@ -40,14 +47,25 @@ int main(int argc, char *argv[]){
 				// }
 			}
 		auto time_end = std::chrono::steady_clock::now();
-		auto micro_seconds = std::chrono::duration_cast<std::chrono::microseconds>(time_end - time_0); 
+		run_time(number_loops, time_0, time_end);
 		//https://stackoverflow.com/questions/22387586/measuring-execution-time-of-a-function-in-c
 		//changed to steady clock - reccomended on the comments, and while on linux they are an alias, wouldnt work on windows
-		std::cout << "loop ran in " <<micro_seconds.count() << " microseconds" <<'\n';
+	}
+	else if (sort_type == "default_sort"){
+		std::vector<int> vec;
+		auto time_0 = std::chrono::steady_clock::now();
+		for (int i {0}; i < number_loops; i++){
+			vec = vec_creator(number_elements);
+			std::vector<int> vec2 = vec;
+			sort(vec.begin(), vec.end());
+			}
+		auto time_end = std::chrono::steady_clock::now();
+		run_time(number_loops, time_0, time_end);
 	}
 	else if (sort_type == "help"){
 		std::cout << "quick_sort" << "\n";
-		return (-1);
+		std::cout << "default_sort - c++ sort()" << "\n";
+		return (0);
 	}
 	else {
 		std::cout << "Not a recognized sorting algorythm, you can use \"help\" to see available algos" << "\n";

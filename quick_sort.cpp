@@ -16,7 +16,7 @@ int pivot_partition(std::vector<int> &array, int start, int end)
 	int i {start};
 	int ii {start};
 
-	
+
 	while (ii < end){
 		if (array[ii] <= pivot)
 			std::swap(array[ii], array[i++]);
