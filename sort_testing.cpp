@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <vector>
 #include <string>
+#include <chrono>
 
 void sort_q(std::vector<int> &array);
 
@@ -28,15 +29,21 @@ int main(int argc, char *argv[]){
 	std::string sort_type {argv[1]};
 	if (sort_type == "quick_sort"){
 		std::vector<int> vec;
+		auto time_0 = std::chrono::steady_clock::now();
 		for (int i {0}; i < number_loops; i++){
 			vec = vec_creator(number_elements);
 			std::vector<int> vec2 = vec;
 			sort_q(vec);
 			// std::sort(vec2.begin(), vec2.end());
 			// if (vec != vec2){
-			// 	std::cout << "Incorrect sorting \n size:" << number_elements << " sort type:" << argv[1] << '\n';
-			// }
-		}
+				// 	std::cout << "Incorrect sorting \n size:" << number_elements << " sort type:" << argv[1] << '\n';
+				// }
+			}
+		auto time_end = std::chrono::steady_clock::now();
+		auto micro_seconds = std::chrono::duration_cast<std::chrono::microseconds>(time_end - time_0); 
+		//https://stackoverflow.com/questions/22387586/measuring-execution-time-of-a-function-in-c
+		//changed to steady clock - reccomended on the comments, and while on linux they are an alias, wouldnt work on windows
+		std::cout << "loop ran in " <<micro_seconds.count() << " microseconds" <<'\n';
 	}
 	else if (sort_type == "help"){
 		std::cout << "quick_sort" << "\n";
