@@ -1,12 +1,4 @@
-#include <iostream>
-#include <cstdlib>
-#include <ctime>
-#include <algorithm>
-#include <vector>
-#include <string>
-#include <chrono>
-
-void sort_q(std::vector<int> &array);
+#include "sort_testing.h"
 
 std::vector<int>	vec_creator(int size){
 	std::vector<int> unsorted(size);
@@ -24,17 +16,17 @@ void	run_time(int number_loops, std::chrono::time_point<std::chrono::steady_cloc
 	return;
 }
 
-int main(int argc, char *argv[]){
-
-	if (argc < 4){
-		std::cout << "missing parameters. Program - Argument - size - loops" << "\n";
-		return (-1);
-	}
-
-	int	number_elements {atoi(argv[2])};
-	int	number_loops	{atoi(argv[3])};
-	std::string sort_type {argv[1]};
-	if (sort_type == "quick_sort"){
+void	sort_bench(void(*sortfunc)(std::vector<int>&), int number_elements, int number_loops){
+		std::vector<int> vec;
+		auto time_0 = std::chrono::steady_clock::now();
+		for (int i {0}; i < number_loops; i++){
+			vec = vec_creator(number_elements);
+			std::vector<int> vec2 = vec;
+			sortfunc(vec);
+			}
+		auto time_end = std::chrono::steady_clock::now();
+		run_time(number_loops, time_0, time_end);
+		/* // comment for older versions of functions, and testing functions comparing to std::sort
 		std::vector<int> vec;
 		auto time_0 = std::chrono::steady_clock::now();
 		for (int i {0}; i < number_loops; i++){
@@ -49,8 +41,25 @@ int main(int argc, char *argv[]){
 		auto time_end = std::chrono::steady_clock::now();
 		run_time(number_loops, time_0, time_end);
 		//https://stackoverflow.com/questions/22387586/measuring-execution-time-of-a-function-in-c
-		//changed to steady clock - reccomended on the comments, and while on linux they are an alias, wouldnt work on windows
+		//changed to steady clock - reccomended on the comments, and while on linux they are an alias, wouldnt work on windows*/
+}
+
+int main(int argc, char *argv[]){
+
+	if (argc < 4){
+		std::cout << "missing parameters. Program - Argument - size - loops" << "\n";
+		return (-1);
 	}
+
+	int	number_elements {atoi(argv[2])};
+	int	number_loops	{atoi(argv[3])};
+	if (number_loops == 0){
+		std::cout << "Performed 0 loops in 0 microseconds" << '\n';
+		return (0);
+	}
+	std::string sort_type {argv[1]};
+	if (sort_type == "quick_sort")
+		sort_bench(sort_q, number_elements, number_loops);
 	else if (sort_type == "default_sort"){
 		std::vector<int> vec;
 		auto time_0 = std::chrono::steady_clock::now();
@@ -62,6 +71,8 @@ int main(int argc, char *argv[]){
 		auto time_end = std::chrono::steady_clock::now();
 		run_time(number_loops, time_0, time_end);
 	}
+	else if (sort_type == "selection_sort")
+		sort_bench(sort_selection, number_elements, number_loops);
 	else if (sort_type == "help"){
 		std::cout << "quick_sort" << "\n";
 		std::cout << "default_sort - c++ sort()" << "\n";

@@ -1,9 +1,5 @@
 
-#include <vector>
-#include <cstdlib> 
-#include <ctime>
-#include <algorithm>
-#include <iostream>
+#include "sort_testing.h"
 
 int pivot_partition(std::vector<int> &array, int start, int end)
 {
