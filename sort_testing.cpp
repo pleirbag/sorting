@@ -21,7 +21,6 @@ void	sort_bench(void(*sortfunc)(std::vector<int>&), int number_elements, int num
 		auto time_0 = std::chrono::steady_clock::now();
 		for (int i {0}; i < number_loops; i++){
 			vec = vec_creator(number_elements);
-			std::vector<int> vec2 = vec;
 			sortfunc(vec);
 			}
 		auto time_end = std::chrono::steady_clock::now();
@@ -73,9 +72,13 @@ int main(int argc, char *argv[]){
 	}
 	else if (sort_type == "selection_sort")
 		sort_bench(sort_selection, number_elements, number_loops);
+	else if (sort_type == "radix_base_10_sort")
+		sort_bench(sort_radix_b10, number_elements, number_loops);
 	else if (sort_type == "help"){
 		std::cout << "quick_sort" << "\n";
+		std::cout << "selection_sort" << "\n";
 		std::cout << "default_sort - c++ sort()" << "\n";
+		std::cout << "radix_base_10_sort - radix sort with a base 10" << "\n";
 		return (0);
 	}
 	else {
